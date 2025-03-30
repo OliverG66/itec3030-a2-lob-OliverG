@@ -6,5 +6,5 @@ import ca.yorku.cmg.lob.stockexchange.events.Event;
  * Interface for accessing TradingStrategy functionality.
  */
 public interface ITradingStrategy {
-	void actOnEvent(Event e, int pos, int price);
+	void executeTrade(TradingAgent agent, Event event);
 }
