@@ -12,7 +12,8 @@ public abstract class TradingAgent {
 	protected Trader t;
 	protected StockExchange exc;
 	protected NewsBoard news;
-	
+	protected ITradingStrategy strategy;
+
 	/**
 	 * Constructor
 	 * @param t The {@linkplain Trader} object associated with the agent.
@@ -24,7 +25,7 @@ public abstract class TradingAgent {
 		this.exc = e;
 		this.news = n;
 	}
-	
+
 	/**
 	 * Method to be called as time advances to {@code time}. In response the TradingAgent will poll the NewsBoard for events.
 	 * @param time The time to advance to.
@@ -44,7 +45,6 @@ public abstract class TradingAgent {
 		}
 	}
 
-	
 	/**
 	 * Check into the {@linkplain NewsBoard} if there are any events at time {@code time}. If there is one (it assumes only one event at a time), send it for examination.
 	 * @param time The time for which to poll for events. Unit is days.
@@ -54,10 +54,8 @@ public abstract class TradingAgent {
 		if (e!=null) {
 			examineEvent(e);
 		}
-
 	}
-	
-	
+
 	/**
 	 * Act in response to a news {@linkplain Event}. Exact reaction strategy to be implemented by specialized agents.
 	 * @param e The {@linkplain Event} in question
@@ -65,8 +63,16 @@ public abstract class TradingAgent {
 	 * @param price The current price of the relevant ticker. 
 	 */
 	protected abstract void actOnEvent(Event e, int pos, int price);
-	
-	
+
 	
 
+	public void setStrategy(ITradingStrategy strategy) {
+		this.strategy = strategy;
+	}
+
+	public void reactToEvent(Event event) {
+		if (strategy != null) {
+			strategy.executeTrade(this, event);
+		}
+	}
 }
